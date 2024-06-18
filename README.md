@@ -16,7 +16,7 @@ Build instructions
 
 ```bash
 git clone --depth 1 https://github.com/shashankx86/PicoAuth
-cd pico-webserver
+cd PicoAuth
 git submodule update --init
 mkdir -p build
 cd build
