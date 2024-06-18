@@ -118,10 +118,6 @@ void init_lwip(void)
     tusb_init();
     
     /* Initialize lwip */
-#ifdef LWIP_TIMERS
-#undef LWIP_TIMERS
-#endif
-#define LWIP_TIMERS 0
     lwip_init();
     
     /* the lwip virtual MAC address must be different from the host's; to ensure this, we toggle the LSbit */
@@ -212,7 +208,7 @@ void wait_for_netif_is_up()
 
 
 /* lwip platform specific routines for Pico */
-static mutex_t lwip_mutex;
+auto_init_mutex(lwip_mutex);
 static int lwip_mutex_count = 0;
 
 sys_prot_t sys_arch_protect(void)
