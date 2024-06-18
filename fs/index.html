@@ -6,9 +6,14 @@
     <title>Welcome to your Pico</title>
     <script>
         window.onload = function() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('current-time').textContent = timeString;
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                document.getElementById('current-time').textContent = timeString;
+            }
+
+            updateTime(); // Initial call to display the current time immediately
+            setInterval(updateTime, 1000); // Update the time every second
         }
     </script>
 </head>
