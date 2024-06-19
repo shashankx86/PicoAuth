@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -48,4 +50,34 @@
   padding: 10px;
   font-family: Arial, sans-serif;
   font-size: 20px;
+}
+
+.dropdown-container {
+  /* display: flex; */
+  position: absolute;
+  top: 0;
+  /* justify-content: center; */
+  margin-top: 20px;
+  width: 100%;
+}
+
+select {
+  width: 300px;
+  height: 50px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 1.2rem;
+  text-align: center;
+  outline: none;
+  appearance: none; /* Remove default dropdown arrow */
+  background: rgb(54, 54, 54);
+}
+
+select:focus {
+  border-color: #007bff;
+}
+
+select option {
+  text-align: center;
 }
