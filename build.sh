@@ -1,6 +1,6 @@
 rm -rf build
-bash regen-fsdata.sh
 git submodule update --init
+bash regen-fsdata.sh
 mkdir -p build
 cd build
 cmake ..
