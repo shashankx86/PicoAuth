@@ -1,10 +1,8 @@
 import { HOTP, TOTP, Authenticator } from '@otplib/core';
-import { keyDecoder, keyEncoder } from '@otplib/plugin-thirty-two'; // use your chosen base32 plugin
-import { createDigest, createRandomBytes } from '@otplib/plugin-crypto'; // use your chosen crypto plugin
-import fetch from 'node-fetch';
-import fs from 'fs/promises'; // For reading local files
+import { keyDecoder, keyEncoder } from '@otplib/plugin-thirty-two';
+import { createDigest, createRandomBytes } from '@otplib/plugin-crypto';
 
-// Setup an OTP instance which you need
+// Setup OTP instances
 const hotp = new HOTP({ createDigest });
 const totp = new TOTP({ createDigest });
 const authenticator = new Authenticator({
@@ -14,13 +12,8 @@ const authenticator = new Authenticator({
   keyEncoder
 });
 
-function generateToken(config, service) {
-  const serviceConfig = config[service];
-  if (!serviceConfig) {
-    console.error(`Service ${service} not found in config.`);
-    return;
-  }
-
+// Function to generate OTP based on service configuration
+function generateToken(serviceConfig) {
   const { id, type, key } = serviceConfig;
   let token;
   let otpInstance;
@@ -39,29 +32,7 @@ function generateToken(config, service) {
       token = authenticator.generate(key);
   }
 
-  console.log(`Name: ${service}`);
-  console.log(`Id: ${id}`);
-  console.log(`OTP: ${token}`);
-  console.log(`Type: ${type.toUpperCase()}`);
+  return { id, token, type: type.toUpperCase() };
 }
 
-// function logConfig(config) {
-//   console.log('Config:', JSON.stringify(config, null, 2));
-// }
-
-async function main() {
-  try {
-    const data = await fs.readFile('/workspaces/PicoAuth/src/config.json', 'utf8'); // Adjust the path if needed
-    const jsonData = JSON.parse(data);
-    const config = jsonData.config;
-    // logConfig(config);
-    
-    // Check for user selection
-    const service = 'aws'; // Replace with the desired service name (e.g., 'github', 'aws', etc.)
-    generateToken(config, service);
-  } catch (error) {
-    console.error('Error fetching config:', error);
-  }
-}
-
-main();
+export { generateToken };
