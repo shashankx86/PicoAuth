@@ -2,7 +2,7 @@
 
 ![authpico_logo](https://github.com/shashankx86/PicoAuth/assets/64682801/2501df5e-3237-4553-94ec-6b156702fcf1)
 
-Get your TOTP from your browser using pico! 
+Get your TOTP/HOTP from your browser using pico! 
 
 ### pico-webserver
 
