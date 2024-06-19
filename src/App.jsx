@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import './App.css';
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch('../public/config.json')
+    fetch('/config.json')
       .then(response => response.json())
       .then(data => setConfig(data.config))
       .catch(error => console.error('Error fetching config:', error));
@@ -28,7 +29,7 @@ function App() {
       {config && (
         <div id="config">
           <h2>Config Data:</h2>
-          <pre>{JSON.stringify(config.github.id, null, 2)}</pre>
+          <pre>{JSON.stringify(config, null, 2)}</pre>
         </div>
       )}
     </div>
@@ -36,4 +37,3 @@ function App() {
 }
 
 export default App;
-
