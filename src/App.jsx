@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTime(new Date().toLocaleTimeString([],{
+      setTime(new Date().toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
@@ -25,7 +25,11 @@ function App() {
     const fetchConfig = async () => {
       try {
         const response = await fetch('/config.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
+        console.log('Fetched config:', data); // Debug log
         setConfig(data.config);
 
         // Automatically select the first service and generate OTP details
@@ -34,6 +38,7 @@ function App() {
           setSelectedService(firstService);
           const serviceConfig = data.config[firstService];
           const details = generateToken(serviceConfig);
+          console.log('Generated OTP details for first service:', details); // Debug log
           setOtpDetails({ name: firstService, ...details });
         }
       } catch (error) {
@@ -50,6 +55,7 @@ function App() {
     if (config && service) {
       const serviceConfig = config[service];
       const details = generateToken(serviceConfig);
+      console.log('Changed service OTP details:', details); // Debug log
       setOtpDetails({ name: service, ...details });
     }
   };
@@ -59,7 +65,7 @@ function App() {
       <div id="local-time">
         {time}
       </div>
-      {config && (
+      {config ? (
         <div className="dropdown-container">
           <select value={selectedService} onChange={handleServiceChange}>
             {Object.keys(config).map(service => (
@@ -67,15 +73,19 @@ function App() {
             ))}
           </select>
         </div>
+      ) : (
+        <p>Loading configuration...</p>
       )}
-      {otpDetails && (
+      {otpDetails ? (
         <div id="otp-details">
           <h2>OTP Details:</h2>
-          <p>Name: {otpDetails.name}</p>
+          <p>Service: {otpDetails.name}</p>
           <p>Id: {otpDetails.id}</p>
           <p>OTP: {otpDetails.token}</p>
           <p>Type: {otpDetails.type}</p>
         </div>
+      ) : (
+        <p>Loading OTP details...</p>
       )}
     </div>
   );
