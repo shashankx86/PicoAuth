@@ -1,0 +1,15 @@
+{
+    "config": {
+      "github": {
+        "id": "your_github_name_here",
+        "type": "totp_or_hotp_key",
+        "key": "your_github_key_here"
+      },
+      "aws": {
+        "id": "your_aws_name_here",
+        "type": "totp_or_hotp_key",
+        "key": "your_aws_key_here"
+      }
+    }
+  }
+  
