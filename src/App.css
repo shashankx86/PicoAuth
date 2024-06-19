@@ -47,27 +47,31 @@
   position: absolute;
   top: 0;
   left: 0;
-  padding: 10px;
+  padding: 15px;
   font-family: Arial, sans-serif;
-  font-size: 20px;
+  font-size: 28px;
 }
 
 .dropdown-container {
-  /* display: flex; */
-  position: absolute;
-  top: 0;
-  /* justify-content: center; */
-  margin-top: 20px;
+  position: fixed; /* Fixed position for staying at the top */
+  top: 0; /* Positioned at the top */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust to center precisely */
+  display: flex;
+  justify-content: center;
   width: 100%;
+  z-index: 1000; /* Ensure dropdown is above other content */
+  padding: 10px 0; /* Add padding for spacing */
+  box-shadow: 0 2px 4px rgb(44, 44, 44); /* shadow for depth */
 }
 
 select {
-  width: 300px;
+  width: 800px;
   height: 50px;
-  border-radius: 25px;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  padding: 10px;
-  font-size: 1.2rem;
+  padding: 4px;
+  font-size: 24px;
   text-align: center;
   outline: none;
   appearance: none; /* Remove default dropdown arrow */
@@ -75,9 +79,9 @@ select {
 }
 
 select:focus {
-  border-color: #007bff;
+  border-color: #575757;
 }
 
 select option {
-  text-align: center;
+  padding-right:6px;
 }
