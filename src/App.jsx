@@ -29,8 +29,6 @@ function App() {
         const data = await response.json();
         console.log('Fetched config:', data); // Debug log
         setConfig(data.config);
-
-        // Removed automatic selection and OTP generation for the first service
       } catch (error) {
         console.error('Error fetching config:', error);
       }
@@ -42,26 +40,26 @@ function App() {
   const handleServiceChange = (event) => {
     const service = event.target.value;
     setSelectedService(service);
-    // Removed OTP generation logic upon service change
   };
 
   return (
     <div>
-      <div id="local-time">
-        {time}
-      </div>
-      {config? (
-        <div className="dropdown-container">
-          <select value={selectedService} onChange={handleServiceChange}>
-            {Object.keys(config).map(service => (
-              <option key={service} value={service}>{service}</option>
-            ))}
-          </select>
+      <div className="navbar">
+        <div id="local-time">
+          {time}
         </div>
-      ) : (
-        <p>Loading configuration...</p>
-      )}
-      {/* Removed OTP details display */}
+        {config ? (
+          <div className="dropdown-container">
+            <select value={selectedService} onChange={handleServiceChange}>
+              {Object.keys(config).map(service => (
+                <option key={service} value={service}>{service}</option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <p>Loading configuration...</p>
+        )}
+      </div>
     </div>
   );
 }

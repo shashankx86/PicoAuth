@@ -43,39 +43,48 @@
   color: #888;
 }
 
-#local-time {
-  position: absolute;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #282c34;
+  box-shadow: 0 2px 4px rgba(44, 44, 44, 0.8);
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+#local-time {
   padding: 15px;
   font-family: Arial, sans-serif;
-  font-size: 28px;
+  font-size: 20px;
+  color: #ffffff;
 }
 
 .dropdown-container {
-  position: fixed; /* Fixed position for staying at the top */
-  top: 0; /* Positioned at the top */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust to center precisely */
   display: flex;
   justify-content: center;
-  width: 100%;
-  z-index: 1000; /* Ensure dropdown is above other content */
-  padding: 10px 0; /* Add padding for spacing */
-  box-shadow: 0 2px 4px rgb(44, 44, 44); /* shadow for depth */
+  flex-grow: 1;
+  max-width: 600px;
 }
 
 select {
-  width: 800px;
-  height: 50px;
+  width: 90%;
+  height: 40px;
   border-radius: 10px;
   border: 1px solid #ccc;
   padding: 4px;
-  font-size: 24px;
+  font-size: 16px;
   text-align: center;
   outline: none;
-  appearance: none; /* Remove default dropdown arrow */
+  appearance: none;
   background: rgb(54, 54, 54);
+  color: #ffffff;
 }
 
 select:focus {
@@ -83,5 +92,27 @@ select:focus {
 }
 
 select option {
-  padding-right:6px;
+  padding-right: 6px;
+}
+
+@media (max-width: 350px) {
+  .navbar {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  #local-time {
+    font-size: 16px;
+  }
+
+  .dropdown-container {
+    width: 40%;
+    max-width: none;
+    min-width: none;
+  }
+
+  select {
+    width: 100%;
+    font-size: 14px;
+  }
 }
