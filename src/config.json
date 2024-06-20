@@ -1,14 +1,8 @@
-{
-    "config": {
-      "github": {
-        "id": "your_github_name_here",
-        "type": "totp",
-        "key": "your_github_key_here"
-      },
-      "aws": {
-        "id": "your_aws_name_here",
-        "type": "totp",
-        "key": "your_aws_key_here"
-      }
-    }
-}
+[
+  {
+    "name": "GitHub",
+    "key": "XXXXXXXXXXXXXXX",
+    "digits": 6,
+    "step": 30
+  }
+]
