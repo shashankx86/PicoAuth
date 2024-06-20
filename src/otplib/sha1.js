@@ -65,4 +65,20 @@ function sha1(message) {
     return buffer;
 }
 
-module.exports = { sha1 };
+function hmacSha1(key, message) {
+    const blockSize = 64;
+    if (key.length > blockSize) key = sha1(key);
+    if (key.length < blockSize) key = Buffer.concat([key, Buffer.alloc(blockSize - key.length)]);
+
+    const oKeyPad = Buffer.alloc(blockSize, 0x5C);
+    const iKeyPad = Buffer.alloc(blockSize, 0x36);
+
+    for (let i = 0; i < blockSize; i++) {
+        oKeyPad[i] ^= key[i];
+        iKeyPad[i] ^= key[i];
+    }
+
+    return sha1(Buffer.concat([oKeyPad, sha1(Buffer.concat([iKeyPad, message]))]));
+}
+
+module.exports = { sha1, hmacSha1 };
