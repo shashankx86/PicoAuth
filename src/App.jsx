@@ -5,6 +5,7 @@ function App() {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [config, setConfig] = useState(null);
   const [selectedService, setSelectedService] = useState('');
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -13,7 +14,7 @@ function App() {
         minute: '2-digit',
         second: '2-digit',
         hour12: true
-      }));
+      }).replace(/am|pm/i, (match) => match.toUpperCase()));
     }, 1000);
 
     return () => clearInterval(timer);
@@ -42,6 +43,14 @@ function App() {
     setSelectedService(service);
   };
 
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
+  const closeSettings = () => {
+    setShowSettings(false);
+  };
+
   return (
     <div>
       <div className="navbar">
@@ -49,17 +58,30 @@ function App() {
           {time}
         </div>
         {config ? (
-          <div className="dropdown-container">
-            <select value={selectedService} onChange={handleServiceChange}>
-              {Object.keys(config).map(service => (
-                <option key={service} value={service}>{service}</option>
-              ))}
-            </select>
+          <div className="navbar-center">
+            <div className="dropdown-container">
+              <select value={selectedService} onChange={handleServiceChange}>
+                {Object.keys(config).map(service => (
+                  <option key={service} value={service}>{service}</option>
+                ))}
+              </select>
+            </div>
           </div>
         ) : (
           <p>Loading configuration...</p>
         )}
+        <div className="settings" onClick={toggleSettings}>
+          <i className="settings-icon">⚙️</i> Settings
+        </div>
       </div>
+      {showSettings && (
+        <div className="settings-popup">
+          <button className="close-button" onClick={closeSettings}>✖</button>
+          <div className="popup-content">
+            WIP
+          </div>
+        </div>
+      )}
     </div>
   );
 }
