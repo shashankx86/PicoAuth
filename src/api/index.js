@@ -1,29 +1,52 @@
-// api/index.js
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const { totp } = require('../src/libotp');
-const { synchronisedTime } = require('../src/synchronisedTime');
+const { totp } = require('../libotp');
+const { synchronisedTime } = require('../synchronisedTime');
 
 const app = express();
+const port = 9006; 
 
 app.use(cors());
 
-const codes = JSON.parse(fs.readFileSync(path.join(__dirname, '../public/test_config.json'), 'utf8'));
+let config;
+try {
+  config = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/config.json'), 'utf8'))['service-config'];
+} catch (error) {
+  console.error('Error reading or parsing config.json:', error);
+}
+
 let selectedIdx = 0;
 
 function generateOTP() {
-  const code = codes[selectedIdx];
-  selectedIdx = (selectedIdx + 1) % codes.length;
+  try {
+    const keys = Object.keys(config);
+    const serviceKey = keys[selectedIdx];
+    const service = config[serviceKey];
+    selectedIdx = (selectedIdx + 1) % keys.length;
 
-  const { password, expiry } = totp(synchronisedTime(), code.key, code.step, code.digits);
-  return { password, expiry, name: code.name };
+    console.log(`Generating OTP for service: ${serviceKey}`);
+    console.log(`Service details:`, service);
+
+    const { password, expiry } = totp(synchronisedTime(), service.key, service.step, service.digits);
+
+    console.log(`Generated OTP: ${password}, Expiry: ${expiry}`);
+
+    return { password, expiry, name: serviceKey };
+  } catch (error) {
+    console.error('Error generating OTP:', error);
+    return { password: null, expiry: 0, name: 'error' };
+  }
 }
 
-app.get('/otp', (req, res) => {
+app.get('/api/otp', (req, res) => {
   const otp = generateOTP();
   res.json(otp);
+});
+
+app.listen(port, () => {
+  console.log(`API server listening at http://localhost:${port}`);
 });
 
 module.exports = app;

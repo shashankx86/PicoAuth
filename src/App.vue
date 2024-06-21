@@ -43,7 +43,11 @@ export default {
       try {
         const response = await fetch('/config.json');
         if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
-        this.config = (await response.json()).config;
+        const configData = await response.json();
+        this.config = configData['service-config'];
+        // Auto-select the first service from the config
+        const firstService = Object.keys(this.config)[0];
+        this.selectedService = firstService;
       } catch (error) {
         console.error('Error fetching config:', error);
         this.error = 'Failed to load configuration.';
@@ -60,7 +64,7 @@ export default {
     },
     async fetchOTP() {
       try {
-        const response = await fetch('/api/otp');
+        const response = await fetch('https://firefox.theaddicts.hackclub.app/api/otp');
         if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
         const data = await response.json();
         this.otp = data;
@@ -68,6 +72,7 @@ export default {
         console.log(`${data.expiry} seconds remaining`);
       } catch (error) {
         console.error('Error fetching OTP:', error);
+        this.otp = { password: '', expiry: 0, name: 'error' };
       }
     },
     updateOTP() {
