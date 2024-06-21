@@ -32,3 +32,10 @@ Copy the resulting pico_webserver.uf2 file to the Pico mass storage device manua
 Content it is serving is in /fs If you change any files there, run ./regen-fsdata.sh
 
 By default it shows a webpage that led you toggle the Pico's led, and allows you to switch to BOOTSEL mode.
+
+The build can be automated with `build.sh`
+
+```
+chmod +x build.sh
+./build.sh
+```
