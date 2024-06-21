@@ -1,7 +1,20 @@
-# Vue 3 + Vite
+![authpico_logo](https://github.com/shashankx86/PicoAuth/assets/64682801/b3e5984a-fdae-4fbe-9467-ebd5b06b6356)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# AuthPico - WebUI
+Frontend for AuthPico
 
-## Recommended IDE Setup
+# Build
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
+```bash
+bun install
+bun run build
+```
+
+The built file are to moved to fs folder of firmware (ref main branch), then
+```
+chmod +x regen-fsdata.sh
+./regen-fsdata.sh
+```
+to update fsdata
+
+The build be automated with `build.sh` present in firmware source (ref main branch)
