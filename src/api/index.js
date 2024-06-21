@@ -20,28 +20,26 @@ try {
   if (!firstServiceKey) {
     throw new Error('No services found in configuration');
   }
-
-  // console.log(`First service key: ${firstServiceKey}`);
 } catch (error) {
   console.error('Error reading or parsing config.json:', error);
 }
 
-function generateOTP() {
+function generateOTP(serviceKey) {
   try {
-    const service = config[firstServiceKey];
+    const service = config[serviceKey];
 
     if (!service) {
-      throw new Error(`Service not found for key: ${firstServiceKey}`);
+      return { password: '404!', expiry: '404!', name: '404!' };
     }
 
-    // console.log(`Generating OTP for service: ${firstServiceKey}`);
-    // console.log(`Service details:`, service);
+    console.log(`Generating OTP for service: ${serviceKey}`);
+    console.log(`Service details:`, service);
 
     const { password, expiry } = totp(synchronisedTime(), service.key, service.step, service.digits);
 
     console.log(`Generated OTP: ${password}, Expiry: ${expiry}`);
 
-    return { password, expiry, name: firstServiceKey };
+    return { password, expiry, name: serviceKey };
   } catch (error) {
     console.error('Error generating OTP:', error);
     return { password: null, expiry: 0, name: 'error' };
@@ -49,7 +47,8 @@ function generateOTP() {
 }
 
 app.get('/api/otp', (req, res) => {
-  const otp = generateOTP();
+  const serviceName = req.query.service || firstServiceKey;
+  const otp = generateOTP(serviceName);
   res.json(otp);
 });
 
