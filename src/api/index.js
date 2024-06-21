@@ -2,13 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const jwt = require('jsonwebtoken');
+const { expressjwt: expressjwt } = require("express-jwt");
 const { totp } = require('../libotp');
 const { synchronisedTime } = require('../synchronisedTime');
 
 const app = express();
 const port = 9006;
+const JWT_SECRET = 'your_jwt_secret'; // Store this securely
 
 app.use(cors());
+app.use(express.json()); // for parsing application/json
+
+// Middleware to protect the /api/config route
+const jwtMiddleware = expressjwt({ secret: JWT_SECRET, algorithms: ['HS256'] });
 
 let config = {};
 let firstServiceKey;
@@ -54,8 +61,25 @@ function generateOTP(serviceKey) {
   }
 }
 
+// Public route for logging in and receiving a token
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // Implement your own authentication logic here
+  if (username === 'admin' && password === 'password') {
+    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } else {
+    res.status(401).json({ message: 'Invalid credentials' });
+  }
+});
+
+// Protected route to get the config
+app.get('/api/config', jwtMiddleware, (req, res) => {
+  res.json(config);
+});
+
 app.get('/api/otp', (req, res) => {
-  // Normalize service name from query parameter to lowercase and remove quotes if present
   const serviceName = req.query.service ? req.query.service.toLowerCase().replace(/['"]/g, '') : firstServiceKey;
   const otp = generateOTP(serviceName);
   res.json(otp);
