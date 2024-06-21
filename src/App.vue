@@ -77,20 +77,31 @@ export default {
         this.otp = data;
         console.log(`Password: ${data.password}`);
         console.log(`${data.expiry} seconds remaining`);
+
+        // Set expiry time and start countdown
+        this.startCountdown(data.expiry);
       } catch (error) {
         console.error('Error fetching OTP:', error);
         this.otp = { password: '', expiry: 0, name: 'error' };
       }
     },
-    updateOTP() {
-      // Clear any existing interval
+    startCountdown(seconds) {
       if (this.otpInterval) clearInterval(this.otpInterval);
-      
-      // Fetch OTP immediately
+
+      this.otp.expiry = seconds;
+
+      this.otpInterval = setInterval(() => {
+        if (this.otp.expiry > 0) {
+          this.otp.expiry--;
+        } else {
+          clearInterval(this.otpInterval);
+          this.fetchOTP();
+        }
+      }, 1000);
+    },
+    updateOTP() {
+      if (this.otpInterval) clearInterval(this.otpInterval);
       this.fetchOTP();
-      
-      // Set up interval to fetch OTP every second
-      this.otpInterval = setInterval(() => this.fetchOTP(), 1000);
     }
   },
   beforeDestroy() {

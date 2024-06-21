@@ -10,7 +10,7 @@
     "aws": {
       "id": "your_aws_name_here",
       "type": "totp",
-      "key": "JBSWY3DPEHPK3PXP",
+      "key": "JBSWY3DPEXPK3PXP",
       "digits": 6,
       "step": 30
     }
