@@ -3,7 +3,7 @@
     "github": {
       "id": "your_github_name_here",
       "type": "totp",
-      "key": "your_github_key_here",
+      "key": "JBSWY3DPEHPK3PXP",
       "digits": 6,
       "step": 30
     },
