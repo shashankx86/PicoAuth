@@ -23,13 +23,18 @@ export default {
       selectedService: '',
       showSettings: false,
       error: null,
-      otp: { password: '', expiry: 0, name: '' }
+      otp: { password: '', expiry: 0, name: '' },
+      otpInterval: null
     };
   },
   created() {
     this.updateTime();
     this.fetchConfig();
-    this.updateOTP();
+  },
+  watch: {
+    selectedService() {
+      this.updateOTP();
+    }
   },
   methods: {
     updateTime() {
@@ -63,8 +68,10 @@ export default {
       this.showSettings = false;
     },
     async fetchOTP() {
+      if (!this.selectedService) return;
+
       try {
-        const response = await fetch('https://firefox.theaddicts.hackclub.app/api/otp');
+        const response = await fetch(`https://firefox.theaddicts.hackclub.app/api/otp?service=${this.selectedService}`);
         if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
         const data = await response.json();
         this.otp = data;
@@ -76,9 +83,18 @@ export default {
       }
     },
     updateOTP() {
+      // Clear any existing interval
+      if (this.otpInterval) clearInterval(this.otpInterval);
+      
+      // Fetch OTP immediately
       this.fetchOTP();
-      setInterval(this.fetchOTP, 1000);
+      
+      // Set up interval to fetch OTP every second
+      this.otpInterval = setInterval(() => this.fetchOTP(), 1000);
     }
+  },
+  beforeDestroy() {
+    if (this.otpInterval) clearInterval(this.otpInterval);
   }
 };
 </script>
