@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { totp } = require('./otplib');
+const { totp } = require('./libotp');
 const { synchronisedTime } = require('./synchronisedTime');
 
 const codes = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
