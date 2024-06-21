@@ -1,7 +1,7 @@
 {
   "service-config": {
     "github": {
-      "id": "your_github_name_here",
+      "id": "testuser",
       "type": "totp",
       "key": "JBSWY3DPEHPK3PXP",
       "digits": 6,

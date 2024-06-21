@@ -1,6 +1,12 @@
 <template>
   <div>
-    <Navbar :time="time" :config="config" :selectedService="selectedService" @toggle-settings="toggleSettings" @update:selectedService="handleServiceChange" />
+    <Navbar
+      :time="time"
+      :config="config"
+      :selectedService="selectedService"
+      @toggle-settings="toggleSettings"
+      @update:selectedService="handleServiceChange"
+    />
     <div v-if="showSettings">
       <SettingsPopup @close-settings="closeSettings" />
     </div>
@@ -11,11 +17,10 @@
 <script>
 import Navbar from './components/Navbar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
-import DropdownBar from './components/DropdownBar.vue';
 import OTPDisplay from './components/OTPDisplay.vue';
 
 export default {
-  components: { Navbar, SettingsPopup, DropdownBar, OTPDisplay },
+  components: { Navbar, SettingsPopup, OTPDisplay },
   data() {
     return {
       time: '',
@@ -49,7 +54,13 @@ export default {
         const response = await fetch('/config.json');
         if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
         const configData = await response.json();
-        this.config = configData['service-config'];
+
+        // Extract only the service name and id
+        this.config = Object.entries(configData['service-config']).reduce((acc, [key, value]) => {
+          acc[key] = { id: value.id };
+          return acc;
+        }, {});
+
         // Auto-select the first service from the config
         const firstService = Object.keys(this.config)[0];
         this.selectedService = firstService;
@@ -109,3 +120,7 @@ export default {
   }
 };
 </script>
+
+<style>
+/* Add any necessary styles here */
+</style>

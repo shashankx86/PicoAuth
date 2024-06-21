@@ -1,7 +1,9 @@
 <template>
   <div class="dropdown-container">
     <select v-if="config" :value="selectedService" @input="handleServiceChange($event.target.value)">
-      <option v-for="(service, key) in config" :key="key" :value="key">{{ key.toUpperCase() }}</option>
+      <option v-for="(service, key) in config" :key="key" :value="key">
+        {{ key.toUpperCase() }} - {{ service.id }}
+      </option>
     </select>
     <div v-else>
       Loading...
