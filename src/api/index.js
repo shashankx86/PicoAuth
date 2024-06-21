@@ -10,11 +10,19 @@ const port = 9006;
 
 app.use(cors());
 
-let config;
+let config = {};
 let firstServiceKey;
 
 try {
-  config = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/config.json'), 'utf8'))['service-config'];
+  const rawConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/config.json'), 'utf8'))['service-config'];
+
+  // Normalize service keys to lowercase
+  for (const key in rawConfig) {
+    if (rawConfig.hasOwnProperty(key)) {
+      config[key.toLowerCase()] = rawConfig[key];
+    }
+  }
+
   firstServiceKey = Object.keys(config)[0];
 
   if (!firstServiceKey) {
@@ -47,7 +55,8 @@ function generateOTP(serviceKey) {
 }
 
 app.get('/api/otp', (req, res) => {
-  const serviceName = req.query.service || firstServiceKey;
+  // Normalize service name from query parameter to lowercase and remove quotes if present
+  const serviceName = req.query.service ? req.query.service.toLowerCase().replace(/['"]/g, '') : firstServiceKey;
   const otp = generateOTP(serviceName);
   res.json(otp);
 });
