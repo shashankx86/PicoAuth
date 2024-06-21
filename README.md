@@ -10,7 +10,7 @@ bun install
 bun run build
 ```
 
-The built file are to moved to fs folder of firmware (ref main branch), then
+The file present in `dist` folder are to be moved to fs folder of firmware (ref main branch), then
 ```
 chmod +x regen-fsdata.sh
 ./regen-fsdata.sh
