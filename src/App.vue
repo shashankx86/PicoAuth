@@ -11,7 +11,7 @@
       <SettingsPopup @close-settings="closeSettings" />
     </div>
     <OTPDisplay :otp="otp" />
-    <Timer /> <!-- Add this line to include the Timer component -->
+    <Timer :expiry="otp.expiry" @timer-finished="fetchOTP" /> <!-- Add this line to include the Timer component -->
   </div>
 </template>
 
@@ -19,7 +19,7 @@
 import Navbar from './components/Navbar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
 import OTPDisplay from './components/OTPDisplay.vue';
-import Timer from './components/Timer.vue'; // WIP
+import Timer from './components/Timer.vue'; 
 
 export default {
   components: { Navbar, SettingsPopup, OTPDisplay, Timer }, // Register the Timer component
