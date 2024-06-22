@@ -19,7 +19,7 @@
 import Navbar from './components/Navbar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
 import OTPDisplay from './components/OTPDisplay.vue';
-import Timer from './components/Timer.vue'; // Import the Timer component
+import Timer from './components/Timer.vue'; // WIP
 
 export default {
   components: { Navbar, SettingsPopup, OTPDisplay, Timer }, // Register the Timer component
@@ -31,7 +31,6 @@ export default {
       showSettings: false,
       error: null,
       otp: { password: '', expiry: 0, name: '' },
-      otpInterval: null
     };
   },
   created() {
@@ -90,35 +89,14 @@ export default {
         this.otp = data;
         console.log(`Password: ${data.password}`);
         console.log(`${data.expiry} seconds remaining`);
-
-        // Set expiry time and start countdown
-        this.startCountdown(data.expiry);
       } catch (error) {
         console.error('Error fetching OTP:', error);
         this.otp = { password: '', expiry: 0, name: 'error' };
       }
     },
-    startCountdown(seconds) {
-      if (this.otpInterval) clearInterval(this.otpInterval);
-
-      this.otp.expiry = seconds;
-
-      this.otpInterval = setInterval(() => {
-        if (this.otp.expiry > 0) {
-          this.otp.expiry--;
-        } else {
-          clearInterval(this.otpInterval);
-          this.fetchOTP();
-        }
-      }, 1000);
-    },
     updateOTP() {
-      if (this.otpInterval) clearInterval(this.otpInterval);
       this.fetchOTP();
     }
-  },
-  beforeDestroy() {
-    if (this.otpInterval) clearInterval(this.otpInterval);
   }
 };
 </script>
