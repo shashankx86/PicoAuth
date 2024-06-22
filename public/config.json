@@ -13,6 +13,12 @@
       "key": "JBSWY3DPEXPK3PXP",
       "digits": 6,
       "step": 30
+    },
+    "bbks": {
+      "id": "example_user",
+      "type": "hotp",
+      "key": "3132333435363738393031323334353637383930",
+      "digits": 8
     }
   }
 }

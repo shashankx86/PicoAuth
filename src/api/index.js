@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { expressjwt: expressjwt } = require("express-jwt");
 const { totp } = require('../libotp');
 const { synchronisedTime } = require('../synchronisedTime');
+const crypto = require('crypto');
 
 const app = express();
 const port = 9006;
@@ -39,6 +40,21 @@ try {
   console.error('Error reading or parsing config.json:', error);
 }
 
+
+function hotp(counter, key, digits) {
+  const keyBuffer = Buffer.from(key, 'hex');
+  const counterBuffer = Buffer.alloc(8);
+  counterBuffer.writeUInt32BE(Math.floor(counter / Math.pow(2, 32)), 0);
+  counterBuffer.writeUInt32BE(counter % Math.pow(2, 22), 4);
+
+  const hmac = crypto.createHmac('sha1', keyBuffer).update(counterBuffer).digest();
+  const offset = hmac[hmac.length - 1] & 0xff;
+  
+  const code = ((hmac.readUInt32BE(offset) & 0x7ffffff) % Math.pow(10, digits)) + Math.floor(Math.random() * 10);
+
+  return code.toString().padStart(digits, '0').slice(0, digits);
+}
+
 function generateOTP(serviceKey) {
   try {
     const service = config[serviceKey];
@@ -50,7 +66,15 @@ function generateOTP(serviceKey) {
     console.log(`Generating OTP for service: ${serviceKey}`);
     console.log(`Service details:`, service);
 
-    const { password, expiry } = totp(synchronisedTime(), service.key, service.step, service.digits);
+    let password, expiry;
+    if (service.type === 'totp') {
+      ({ password, expiry } = totp(synchronisedTime(), service.key, service.step, service.digits));
+    } else if (service.type === 'hotp') {
+      const counter = service.counter || 0; // Use a stored counter or default to 0
+      password = hotp(counter, service.key, service.digits);
+      expiry = null; // HOTP does not expire
+      service.counter = counter + 1; // Increment the counter
+    }
 
     console.log(`Generated OTP: ${password}, Expiry: ${expiry}`);
 
