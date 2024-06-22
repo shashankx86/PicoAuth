@@ -1,14 +1,24 @@
 {
-  "config": {
+  "service-config": {
     "github": {
-      "id": "your_github_name_here",
+      "id": "testuser",
       "type": "totp",
-      "key": "your_github_key_here"
+      "key": "JBSWY3DPEHPK3PXP",
+      "digits": 6,
+      "step": 30
     },
     "aws": {
       "id": "your_aws_name_here",
       "type": "totp",
-      "key": "your_aws_key_here"
+      "key": "JBSWY3DPEXPK3PXP",
+      "digits": 6,
+      "step": 30
+    },
+    "bbks": {
+      "id": "example_user",
+      "type": "hotp",
+      "key": "3132333435363738393031323334353637383930",
+      "digits": 8
     }
   }
 }
