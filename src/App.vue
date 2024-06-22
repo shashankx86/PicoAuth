@@ -11,7 +11,7 @@
       <SettingsPopup @close-settings="closeSettings" />
     </div>
     <OTPDisplay :otp="otp" />
-    <Timer :expiry="otp.expiry" @timer-finished="fetchOTP" /> <!-- Add this line to include the Timer component -->
+    <Timer :expiry="otp.expiry" @timer-finished="fetchOTP" />
   </div>
 </template>
 
@@ -20,9 +20,10 @@ import Navbar from './components/Navbar.vue';
 import SettingsPopup from './components/SettingsPopup.vue';
 import OTPDisplay from './components/OTPDisplay.vue';
 import Timer from './components/Timer.vue'; 
+import { generateOTP } from './api/index.js'; // Adjust the path as necessary
 
 export default {
-  components: { Navbar, SettingsPopup, OTPDisplay, Timer }, // Register the Timer component
+  components: { Navbar, SettingsPopup, OTPDisplay, Timer },
   data() {
     return {
       time: '',
@@ -83,12 +84,10 @@ export default {
       if (!this.selectedService) return;
 
       try {
-        const response = await fetch(`https://firefox.theaddicts.hackclub.app/api/otp?service=${this.selectedService}`);
-        if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
-        const data = await response.json();
-        this.otp = data;
-        console.log(`Password: ${data.password}`);
-        console.log(`${data.expiry} seconds remaining`);
+        const otp = generateOTP(this.selectedService.toLowerCase());
+        this.otp = otp;
+        console.log(`Password: ${otp.password}`);
+        console.log(`${otp.expiry} seconds remaining`);
       } catch (error) {
         console.error('Error fetching OTP:', error);
         this.otp = { password: '', expiry: 0, name: 'error' };
