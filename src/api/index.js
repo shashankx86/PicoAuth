@@ -1,22 +1,12 @@
-const express = require('express');
-const cors = require('cors');
+const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const jwt = require('jsonwebtoken');
-const { expressjwt: expressjwt } = require("express-jwt");
+const crypto = require('crypto');
+const { URL } = require('url');
 const { totp } = require('../libotp');
 const { synchronisedTime } = require('../synchronisedTime');
-const crypto = require('crypto');
 
-const app = express();
 const port = 9006;
-const JWT_SECRET = 'your_jwt_secret'; // Store this securely
-
-app.use(cors());
-app.use(express.json()); // for parsing application/json
-
-// Middleware to protect the /api/config route
-const jwtMiddleware = expressjwt({ secret: JWT_SECRET, algorithms: ['HS256'] });
 
 let config = {};
 let firstServiceKey;
@@ -84,32 +74,24 @@ function generateOTP(serviceKey) {
   }
 }
 
-// Public route for logging in and receiving a token
-app.post('/api/login', (req, res) => {
-  const { username, password } = req.body;
+const server = http.createServer((req, res) => {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = url.pathname;
 
-  // Implement your own authentication logic here
-  if (username === 'admin' && password === 'password') {
-    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+  if (pathname === '/api/config') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(config));
+  } else if (pathname === '/api/otp') {
+    const serviceName = url.searchParams.get('service') ? url.searchParams.get('service').toLowerCase().replace(/['"]/g, '') : firstServiceKey;
+    const otp = generateOTP(serviceName);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(otp));
   } else {
-    res.status(401).json({ message: 'Invalid credentials' });
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
   }
 });
 
-// Protected route to get the config
-app.get('/api/config', jwtMiddleware, (req, res) => {
-  res.json(config);
-});
-
-app.get('/api/otp', (req, res) => {
-  const serviceName = req.query.service ? req.query.service.toLowerCase().replace(/['"]/g, '') : firstServiceKey;
-  const otp = generateOTP(serviceName);
-  res.json(otp);
-});
-
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`API server listening at http://localhost:${port}`);
 });
-
-module.exports = app;
