@@ -39,4 +39,5 @@ echo "authpico: building"
 cd $AUTHPICO_BUILD_FOLDER
 cmake ..
 make
+rm -rf tmp
 echo "authpico: Done!"

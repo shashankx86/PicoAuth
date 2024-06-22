@@ -1,0 +1,62 @@
+fatal: destination path 'tmp' already exists and is not an empty directory.
+bun install v1.1.10 (5102a944)
+
+Checked 112 installs across 150 packages (no changes) [3.00ms]
+$ vite build
+vite v5.3.1 building for production...
+transforming...
+✓ 16 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                  0.45 kB │ gzip:  0.29 kB
+dist/assets/index-BlbuKHhq.css   3.05 kB │ gzip:  1.20 kB
+dist/assets/index-Bnf4-88d.js   59.34 kB │ gzip: 23.76 kB
+✓ built in 443ms
+fatal: No url found for submodule path 'tmp' in .gitmodules
+Regenerating fsdata.c
+
+ makefsdata v2.2.1d - HTML to C source converter
+     by Jim Pettinato               - circa 2003 
+     extended by Simon Goldschmidt  - 2009 
+
+HTTP 1.0 header will be statically included.
+  Processing all files in directory fs and subdirectories...
+
+processing subdirectory /assets/...
+processing /assets/index-BlbuKHhq.css...
+processing /assets/index-Bnf4-88d.js...
+processing /assets/index-Bx132mUk.js...
+processing /assets/index-WQMJkQPS.css...
+processing /api.js...
+processing /config.json...
+processing /index.html...
+processing /logo.png...
+processing /test_config.json...
+
+Creating target file...
+
+
+Processed 9 files - done.
+
+Done
+PICO_SDK_PATH is /home/theaddicts/PicoAuth/pico-sdk
+Defaulting PICO_PLATFORM to rp2040 since not specified.
+Defaulting PICO platform compiler to pico_arm_gcc since not specified.
+-- Defaulting build type to 'Release' since not specified.
+PICO compiler is pico_arm_gcc
+PICO_GCC_TRIPLE defaulted to arm-none-eabi
+-- The C compiler identification is GNU 12.2.1
+-- The CXX compiler identification is GNU 12.2.1
+-- The ASM compiler identification is GNU
+-- Found assembler: /usr/bin/arm-none-eabi-gcc
+Defaulting PICO target board to pico since not specified.
+Using board configuration from /home/theaddicts/PicoAuth/pico-sdk/src/boards/include/boards/pico.h
+-- Found Python3: /usr/bin/python3 (found version "3.11.2") found components: Interpreter 
+TinyUSB available at /home/theaddicts/PicoAuth/tinyusb/src/portable/raspberrypi/rp2040; adding USB support.
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Doxygen needs to be installed to generate the doxygen documentation
+ELF2UF2 will need to be built
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/theaddicts/PicoAuth/build
