@@ -40,19 +40,18 @@ try {
   console.error('Error reading or parsing config.json:', error);
 }
 
-
+// HOTP generation function
 function hotp(counter, key, digits) {
   const keyBuffer = Buffer.from(key, 'hex');
   const counterBuffer = Buffer.alloc(8);
   counterBuffer.writeUInt32BE(Math.floor(counter / Math.pow(2, 32)), 0);
-  counterBuffer.writeUInt32BE(counter % Math.pow(2, 22), 4);
+  counterBuffer.writeUInt32BE(counter % Math.pow(2, 32), 4);
 
   const hmac = crypto.createHmac('sha1', keyBuffer).update(counterBuffer).digest();
-  const offset = hmac[hmac.length - 1] & 0xff;
-  
-  const code = ((hmac.readUInt32BE(offset) & 0x7ffffff) % Math.pow(10, digits)) + Math.floor(Math.random() * 10);
+  const offset = hmac[hmac.length - 1] & 0xf;
+  const code = (hmac.readUInt32BE(offset) & 0x7fffffff) % Math.pow(10, digits);
 
-  return code.toString().padStart(digits, '0').slice(0, digits);
+  return code.toString().padStart(digits, '0');
 }
 
 function generateOTP(serviceKey) {
